@@ -19,7 +19,7 @@ def ConsultarTweets():
                       access_token_secret=os.environ.get("ACCESS_TOKKEN_SECRET"))
 
     results = api.GetSearch(
-        raw_query="q=covid%20&result_type=recent&since=2014-07-19&count=10")
+        raw_query="q=peru%20&result_type=recent&since=2014-07-19&count=10")
 
     for i in results:
         print(str(num + 1) + ": " + results[num].text)
