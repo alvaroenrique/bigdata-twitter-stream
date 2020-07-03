@@ -11,10 +11,13 @@ redisClient = redis.StrictRedis(host='localhost',
                                     db=0)
 
 def procesar_palabras(palabras):
+  # Convertir palabras a lista de tuplas: ("palabra", 3)
   for palabra in palabras.collect():
     current_value = redisClient.zscore('palabras', palabra[1])
     if (current_value == None):
       current_value = 0
+    # Agregar la palabra y sumarlo a su valor actual en el key "palabras"
+    # Formato {"palabra": "3"}
     redisClient.zadd('palabras',{ palabra[0]: current_value + 1 })
 
 
@@ -27,6 +30,7 @@ def main():
   pares = palabras.map(lambda pal: (pal, 1))
   reducido = pares.reduceByKey(lambda x, y: x + y)
 
+  # Convertir cada item a RDD
   reducido.foreachRDD(procesar_palabras)
   
   reducido.pprint()
