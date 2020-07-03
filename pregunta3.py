@@ -26,7 +26,7 @@ def getTweetsWords(q, until_date, count=10):
 def setDicInRedis(dic):
     redisClient = redis.StrictRedis(host='localhost',
                                     port=6379,
-                                    db=0)
+                                    db=1)
     redisClient.zadd('p3', dic)
 
     # get all words: zrange p3 0 -1
@@ -35,10 +35,10 @@ def setDicInRedis(dic):
 
 
 def main():
-    sc = SparkContext("local", "Analisis_Peliculas")
+    sc = SparkContext("local", "Pregunta 3")
     sqlContext = SQLContext(sc)
     rdd = sqlContext.createDataFrame(
-        getTweetsWords("covid", "2020-06-25", "50"), ['text', 'count']
+        getTweetsWords("covid", "2020-06-30", "50"), ['text', 'count']
     ).rdd
 
     reduced = rdd.reduceByKey(
